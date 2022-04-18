@@ -33,7 +33,7 @@ export default function HeaderBar() {
 
   return (
     //   for color
-    <AppBar position="static">
+    <AppBar position="static" aria-labelledby="primary-navigation">
       {/* for margin and width */}
       <Container maxWidth="xl">
         {/* for flex layout */}
@@ -41,6 +41,7 @@ export default function HeaderBar() {
           <Typography
             align="left"
             variant="h2"
+            component="span"
             sx={{ flexGrow: { xs: 1, md: 0 } }}
           >
             LOGO
