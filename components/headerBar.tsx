@@ -19,7 +19,7 @@ import ArticleIcon from "@mui/icons-material/Article";
 import React, { useState } from "react";
 import { UserAvatar } from "./userAvatar";
 import SearchBox from "./searchBox";
-import NightModeToggle from "./nightModeToggle";
+import DarkModeToggle from "./darkModeToggle";
 import Link from "next/link";
 
 const navItems = [
@@ -83,7 +83,7 @@ export default function HeaderBar() {
               onClose={() => setDrawerOpen(false)}
             >
               <Container>
-                <NightModeToggle></NightModeToggle>
+                <DarkModeToggle></DarkModeToggle>
                 <Divider></Divider>
                 <Container
                   sx={{ my: "30px", display: "flex", justifyContent: "center" }}

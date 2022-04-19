@@ -6,9 +6,9 @@ import React from "react";
 export default function MdxWrapper({ children }) {
   return (
     <>
-      <HeaderBar />
       <Paper>
-        <Container sx={{ my: "4rem" }} maxWidth="md">
+        <HeaderBar />
+        <Container sx={{ paddingBlockStart: "4rem" }} maxWidth="md">
           {children}
         </Container>
       </Paper>
