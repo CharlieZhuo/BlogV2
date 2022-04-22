@@ -1,0 +1,40 @@
+# How to create Table of content component in React
+
+## What i am hoping to achieve:
+
+A Table of Content component that generate a blog page content's catalog based on HTML elements(Mostly `<H1>` to `<H6>`) tree .
+
+1. Generated table should have tree like data structure,Each tree node corresponds to an html element and has its children nodes.
+2. Clicking on a table item should resulted in page scrolling to html element.
+3. It should be aware of page's current scroll position, and highlights the item that contain scroll position.
+4. We should be able to style it freely
+
+## My initial solution
+
+Since i am using mdx as blog file format,and `@mdx-js` package support plugins from remark and rehype(See the [Architecture](https://mdxjs.com/packages/mdx/#architecture) of @mdx-js).
+
+[remark-toc](https://github.com/remarkjs/remark-toc) was my initial thought. It use mdast-util-toc under the hood to generate toc from markdown's abstract syntax tree.
+The generated toc at specific location will also be markdown.
+It's commonnly used for generating toc for Github readme page.
+
+However,it comes with some limitation as I can't achieve target 3 and 4 easily. I would perfer table of content to be a React component instead of plain html generated from markdown.
+
+## Next solution found
+
+Trough some online searching, I found the common way to implement table of content is through [DOM api](https://developer.mozilla.org/zh-CN/docs/Web/API/Document_Object_Model/Introduction#dom_interfaces).
+
+### Get elements
+
+You get elements that you want to use as item in TOC from `Document.querySelectorAll(selectorString)`.
+`selectorString` is the css selector for target elements.
+For example, to get all `<H1>` to `<H6>` elements, use
+
+```
+const result = Array.from(
+        document.querySelectorAll("H1,H2,H3,H4,H5,H6")
+      );
+```
+
+### Generate Table of Content from result elements
+
+### implement detection of scroll position

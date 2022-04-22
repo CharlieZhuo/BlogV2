@@ -1,0 +1,23 @@
+数据转换只将已有数据集根据转换方法转换成新数据集。
+支持的方法有 映射，排序，回归，reduce  
+在 dataset 数组中加入新对象：
+{
+// 这个 dataset 的 index 是 `2`。
+// 同样，这里因为 `fromDatasetIndex` 和 `fromDatasetId` 都没有被指定，
+// 那么输入默认来自于 index 为 `0` 的 dataset 。
+transform: {
+// 这个类型为 "filter" 的 transform 能够遍历并筛选出满足条件的数据项。
+type: 'filter',
+// 每个 transform 如果需要有配置参数的话，都须配置在 `config` 里。
+// 在这个 "filter" transform 中，`config` 用于指定筛选条件。
+// 下面这个筛选条件是：选出维度（ dimension ）'Year' 中值为 2012 的所有
+// 数据项。
+config: { dimension: 'Year', value: 2012 }
+}
+},
+
+transform 的 Type 属性可为：filter 和 sort 还可定义自定义的转换。
+
+替代方案是先用其他 js 库对数据进行处理后再放入 dataset
+
+图例 option 中的 legend 属性
