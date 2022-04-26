@@ -6,9 +6,17 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/* Apply the filter directly on the body tag */
+body.dark-theme img {
+  filter: brightness(0.8) contrast(1.2);
+}
+
+body.dark-theme {
+  font-weight: 350;
+}
+
+body.dark-theme svg.icon path {
+  fill: #efefef;
 }
 
 * {
