@@ -1,0 +1,113 @@
+---
+{ "title": "如何在Next.js中实现夜间模式", "date": "2022-04-26T06:46:12.269Z" }
+---
+
+# 夜间模式以及它在 Next.js 中的实现
+
+## 检测夜间模式偏好
+
+大部分操作系统允许用户选择深色及浅色主题，或单独设置夜间模式偏好。MacOS（Mojave 或更高版本）、iOS (13.0+)、Windows (10+) 和 Android (10+)都支持夜间模式。
+
+有些浏览器(user agent)也支持设置夜间模式偏好。
+
+可用 css 的媒体查询中的[prefers-color-scheme](https://developer.mozilla.org/zh-CN/docs/Web/CSS/@media/prefers-color-scheme)获取用户环境的夜间模式偏好。
+这个特性在大部分现代浏览器中都有支持。
+
+可用 js 中的 DOM API 里面的 Window.matchMedia()创建自定义的 hook 检测媒体。例如：
+
+```
+const useMediaQuery = (query) => {
+  const [matches, setMatches] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    if (media.matches !== matches) {
+      setMatches(media.matches);
+    }
+    const listener = () => setMatches(media.matches);
+    window.addEventListener("resize", listener);
+    return () => window.removeEventListener("resize", listener);
+  }, [matches, query]);
+
+  return matches;
+}
+```
+
+我用了 MUI，其中带有 useMediaQuery() hook 检测夜间模式偏好，如`const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");`
+
+## 留给用户手动设置的能力
+
+用户可能更喜欢某一种模式下的网站样式，可能与操作系统设置不匹配。
+因此应留给用户覆盖夜间模式设置的能力。
+我的建议是，将夜间模式开关做成三段开关：开启，自动，关闭。
+
+### 保存用户手动设置
+
+当用户手动设置偏好后，网站应保存用户的偏好，已在用户的后续访问中继续使用。
+保存方式通常用 localstorage 或 cookie。
+
+## 网页加载完成后的闪烁
+
+有些框架带[预渲染页面功能](https://nextjs.org/docs/basic-features/pages#pre-rendering)(比如 Next.js 等)，它会提前生成页面的 html 以减少客户端的 js 使用。
+这时，可能会出现页面加载后的夜间模式切换。这是因为服务器预渲染页面时无法获取客户端的存储与偏好，只能生成夜间模式关闭或打开两种情况的其中一种页面（通常对应管理夜间模式状态的初始化值），而浏览器在渲染完成 html 到客户端 js 开始执行的有一定时间间隔。
+比如预渲染页面是夜间模式关闭的，而客户端的偏好是夜间模式打开。这时访问页面就会出现短暂的闪烁。
+
+要消除闪烁，可以让页面在客户端 js 执行后在进行渲染（将会有性能代价）。在 Next.js 中，useEffect() hook 能保证只在客户端运行。
+可以用`const [clientFlag,setClientFlag]=useState(false)`添加一个客户端 js 运行标记，默认值为 False，在 useEffect()hook 中将这个标记 设置为 true。
+当只在这个标记为 true 时渲染 UI 就能解决闪烁问题。
+
+第二种方式只对服务端渲染的页面有效：将夜间模式偏好放置在 cookie 中随请求发送，服务端根据 cookie 渲染相应的页面。
+
+## 夜间模式的设计
+
+### 图像
+
+最好在夜间模式中稍微降低图像的亮度和对比度，以便在黑暗背景下看起来舒适
+对于用 DOM api 在决定夜间模式后在 body 上加 dark-theme 类
+
+```
+if (clientFlag) {
+    if (inDarkModeState) document.body.classList.add("dark-theme");
+    else document.body.classList.remove("dark-theme");
+  }
+```
+
+然后在全局 css 中添加
+
+```
+body.dark-theme img {
+  filter: brightness(.8) contrast(1.2);
+}
+```
+
+### 夜间模式阴影
+
+直接反转颜色会导致阴影在夜间模式中变成“背光”。
+若要维持阴影效果，需保证背景颜色足够浅以显示阴影，而突出的物体颜色应比背景颜色浅。
+
+### 夜间模式字体与图标显示
+
+深色背景上的浅色字体会显得比浅色背景上的深色字体更粗。
+可以用和图片同样的方法，在全局 css 中设置在夜间模式中减少 font-weight.
+
+```
+body.dark-theme {
+  font-weight: 350;
+}
+body.dark-theme svg.icon path {
+  fill: #efefef;
+}
+```
+
+### 夜间模式的颜色
+
+Material design 对夜间模式的颜色设计有[详细的介绍](https://material.io/design/color/dark-theme.html)。
+
+主要有：
+
+- 背景不用全黑而是深灰色（#121212），其他颜色与全白文字对比度至少为 15.8:1
+- 对大面积组件使用有限的风格色，主要使用深色。
+- 保证颜色有足够的对比度，在所有 elevation 中，与正文颜色的对比度都至少 4.5:1
+- 更高 elevation 的组件表面更亮
+
+[对比度](https://www.w3.org/TR/WCAG21/%23contrast-minimum#dfn-contrast-ratio)请参考 W3C 的[网页可访问性指南](https://www.w3.org/TR/WCAG21/)
