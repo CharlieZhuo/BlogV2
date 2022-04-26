@@ -16,13 +16,15 @@ import EmailIcon from "@mui/icons-material/Email";
 import InfoIcon from "@mui/icons-material/Info";
 import ArticleIcon from "@mui/icons-material/Article";
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { UserAvatar } from "./userAvatar";
 import SearchBox from "./searchBox";
-import DarkModeToggle from "./darkModeToggle";
+import DarkModeSwitch from "./darkModeSwitch";
 import Link from "next/link";
+import Card from "@mui/material/Card";
+import { DarkModeContext } from "./muiThemeProvider";
 
-const navItems = [
+export const navItems = [
   { name: "Blogs", icon: <ArticleIcon />, link: "/blogs" },
   { name: "About", icon: <InfoIcon />, link: "/about" },
   { name: "Contact", icon: <EmailIcon />, link: "/contact" },
@@ -30,21 +32,22 @@ const navItems = [
 
 export default function HeaderBar() {
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
+  const darkMode = useContext(DarkModeContext);
 
   return (
-    //   for color
+    //   for elevation
     <AppBar position="static" aria-labelledby="primary-navigation">
       {/* for margin and width */}
-      <Container maxWidth="xl">
+      <Container maxWidth="md">
         {/* for flex layout */}
         <Toolbar disableGutters={true}>
           <Typography
             align="left"
-            variant="h2"
+            variant="h4"
             component="span"
             sx={{ flexGrow: { xs: 1, md: 0 } }}
           >
-            LOGO
+            CharlieTech
           </Typography>
 
           {/* button for large screen */}
@@ -56,8 +59,14 @@ export default function HeaderBar() {
             }}
           >
             {navItems.map((page) => (
-              <Link href={page.link} key={page.name}>
-                <Button sx={{ my: 2, color: "white", display: "block" }}>
+              <Link href={page.link} key={page.name} passHref>
+                <Button
+                  sx={{
+                    my: 2,
+                    color: (theme) => theme.palette.text.primary,
+                    display: "block",
+                  }}
+                >
                   {page.name}
                 </Button>
               </Link>
@@ -72,7 +81,6 @@ export default function HeaderBar() {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={() => setDrawerOpen(true)}
-              color="inherit"
             >
               <MenuIcon />
             </IconButton>
@@ -81,9 +89,13 @@ export default function HeaderBar() {
               anchor="right"
               open={drawerOpen}
               onClose={() => setDrawerOpen(false)}
+              elevation={1}
             >
               <Container>
-                <DarkModeToggle></DarkModeToggle>
+                <Card sx={{ display: "inline-block" }} elevation={2}>
+                  <DarkModeSwitch></DarkModeSwitch>
+                  <Typography>DarkMode switch</Typography>
+                </Card>
                 <Divider></Divider>
                 <Container
                   sx={{ my: "30px", display: "flex", justifyContent: "center" }}
