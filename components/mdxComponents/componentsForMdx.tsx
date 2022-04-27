@@ -1,9 +1,7 @@
-import Image from "next/image";
 import MdxWrapper from "./mdxWrapper";
 import Typography from "@mui/material/Typography";
 import { default as NextLink } from "next/link";
 import { default as MUILink } from "@mui/material/Link";
-import BlockQuote from "./blockQuote";
 import Divider from "@mui/material/Divider";
 import LinkIcon from "@mui/icons-material/Link";
 import MdxImage from "./mdxImage";
@@ -22,7 +20,6 @@ const componentsForMdx = {
       </MUILink>
     </NextLink>
   ),
-  blockquote: BlockQuote,
   em: ({ children }) => (
     <Typography
       variant="body1"
