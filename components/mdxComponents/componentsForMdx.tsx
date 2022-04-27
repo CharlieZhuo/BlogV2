@@ -3,19 +3,21 @@ import MdxWrapper from "./mdxWrapper";
 import Typography from "@mui/material/Typography";
 import { default as NextLink } from "next/link";
 import { default as MUILink } from "@mui/material/Link";
-import BlockQuote from "../blockQuote";
+import BlockQuote from "./blockQuote";
 import Divider from "@mui/material/Divider";
 import LinkIcon from "@mui/icons-material/Link";
+import MdxImage from "./mdxImage";
 
-const ResponsiveImage = (props) => (
-  <Image alt={props.alt} layout="responsive" {...props} />
-);
 const componentsForMdx = {
   wrapper: MdxWrapper,
 
   a: (props) => (
     <NextLink href={props.href} passHref>
-      <MUILink href={props.href} variant="body2">
+      <MUILink
+        href={props.href}
+        variant="body1"
+        sx={{ color: (theme) => theme.palette.text.primary }}
+      >
         {props.children}
       </MUILink>
     </NextLink>
@@ -26,7 +28,6 @@ const componentsForMdx = {
       variant="body1"
       sx={{
         px: "0.25rem",
-        color: "info.main",
         fontStyle: "italic",
       }}
       component="span"
@@ -91,6 +92,6 @@ const componentsForMdx = {
       {children}{" "}
     </Typography>
   ),
-  img: ResponsiveImage,
+  img: MdxImage,
 };
 export default componentsForMdx;
