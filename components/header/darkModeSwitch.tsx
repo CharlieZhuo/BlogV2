@@ -1,7 +1,7 @@
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { useContext } from "react";
-import { DarkModeContext } from "./muiThemeProvider";
+import { DarkModeContext } from "../muiThemeProvider";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import HdrAutoIcon from "@mui/icons-material/HdrAuto";

@@ -22,7 +22,7 @@ import SearchBox from "./searchBox";
 import DarkModeSwitch from "./darkModeSwitch";
 import Link from "next/link";
 import Card from "@mui/material/Card";
-import { DarkModeContext } from "./muiThemeProvider";
+import { DarkModeContext } from "../muiThemeProvider";
 
 export const navItems = [
   { name: "Blogs", icon: <ArticleIcon />, link: "/blogs" },
