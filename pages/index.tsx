@@ -8,13 +8,13 @@ import { GetStaticProps, GetStaticPaths, GetServerSideProps } from "next";
 import Head from "next/head";
 import { useContext } from "react";
 
-import HeaderBar from "../components/headerBar";
+import HeaderBar from "../components/header/headerBar";
 import IndexParticle from "../components/indexParticle";
 import { DarkModeContext } from "../components/muiThemeProvider";
 import RecentPosts from "../components/recentPosts";
 import scanFiles from "../lib/scanMdxFiles";
 
-export default function Home({ metaArray }) {
+export default function Home({ LatestPosts }) {
   const darkMode = useContext(DarkModeContext);
   return (
     <>
@@ -42,7 +42,7 @@ export default function Home({ metaArray }) {
           <Divider sx={{ marginTop: "30vh" }}></Divider>
 
           <Paper elevation={0}>
-            <RecentPosts posts={[]}></RecentPosts>
+            <RecentPosts posts={LatestPosts}></RecentPosts>
           </Paper>
         </Container>
       </main>
@@ -52,8 +52,8 @@ export default function Home({ metaArray }) {
   );
 }
 export const getStaticProps: GetStaticProps = async () => {
-  const metaArray = await scanFiles();
+  const LatestPosts = await scanFiles();
   return {
-    props: { metaArray },
+    props: { LatestPosts },
   };
 };
