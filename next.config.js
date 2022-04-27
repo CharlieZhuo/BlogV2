@@ -1,7 +1,10 @@
+// we will import our custom remark plugin
+const frontmatterRemarkPlugin = require("./removeFrontMatterForDisplay");
+
 const withMDX = require("@next/mdx")({
   extension: /\.mdx?$/,
   options: {
-    remarkPlugins: [],
+    remarkPlugins: [frontmatterRemarkPlugin],
     rehypePlugins: [],
     // If you use `MDXProvider`, uncomment the following line.
     providerImportSource: "@mdx-js/react",
@@ -9,6 +12,6 @@ const withMDX = require("@next/mdx")({
 });
 
 module.exports = withMDX({
-  pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
+  pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
   reactStrictMode: true,
 });
